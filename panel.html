@@ -52,8 +52,8 @@ const cleanRut = r => String(r || '').toUpperCase().replace(/[^0-9K]/g, '');
 const fmtRut = r => { r = cleanRut(r).replace(/^0+/, ''); return r.length < 2 ? r : r.slice(0, -1).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '-' + r.slice(-1); };
 async function rutHash(rut) { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('cc|' + cleanRut(rut).replace(/^0+/, ''))); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join(''); }
 // La sesión es la misma de la página de capacitaciones (RUT + clave del trabajador)
-try { const p = JSON.parse(localStorage.getItem('hsl_cap_persona') || 'null'); if (p && p.rut && p.k) AUTH = { rut: p.rut, k: p.k }; } catch (e) {}
-try { if (!AUTH) { const p = JSON.parse(sessionStorage.getItem('hsl_panel_auth') || 'null'); if (p && p.rut && p.k) AUTH = p; } } catch (e) {}
+try { const p = JSON.parse(localStorage.getItem('notaria_cap_persona') || 'null'); if (p && p.rut && p.k) AUTH = { rut: p.rut, k: p.k }; } catch (e) {}
+try { if (!AUTH) { const p = JSON.parse(sessionStorage.getItem('notaria_panel_auth') || 'null'); if (p && p.rut && p.k) AUTH = p; } } catch (e) {}
 
 function login(msg) {
 $('#app').innerHTML = `<div class="login"><img src="${LOGO}" alt="Primera Notaría de Los Ángeles"><h2 style="margin:0">Panel de Prevención</h2>
@@ -68,10 +68,10 @@ if (!AUTH) return login();
 if (!enFondo) $('#app').innerHTML = '<div class="cargando">Cargando datos…</div>';
 try {
 AUTH.h = await rutHash(AUTH.rut); const r = await fetch(URL_API + '?panel=' + AUTH.h + '&k=' + encodeURIComponent(AUTH.k)).then(r => r.json());
-if (!r.ok) { try { localStorage.removeItem('hsl_panel_cache'); sessionStorage.removeItem('hsl_panel_auth'); } catch (e) {} const n = AUTH.nuevo; AUTH = null;
+if (!r.ok) { try { localStorage.removeItem('notaria_panel_cache'); sessionStorage.removeItem('notaria_panel_auth'); } catch (e) {} const n = AUTH.nuevo; AUTH = null;
 return login(n ? 'RUT o clave incorrectos, o este RUT no tiene panel de jefatura. Si no recuerdas tu clave, contacta a administración.' : ''); }
-if (AUTH.nuevo) { delete AUTH.nuevo; try { const rec = $('#rec'); if (!rec || rec.checked) { const p = JSON.parse(localStorage.getItem('hsl_cap_persona') || '{}'); localStorage.setItem('hsl_cap_persona', JSON.stringify(Object.assign(p, { name: (r.user || {}).nombre || p.name, rut: AUTH.rut, k: AUTH.k }))); } else sessionStorage.setItem('hsl_panel_auth', JSON.stringify(AUTH)); } catch (e) {} }
-D = r; try { localStorage.setItem('hsl_panel_cache', JSON.stringify(Object.assign({}, r, { _rut: AUTH.rut }))); } catch (e) {} pintar();
+if (AUTH.nuevo) { delete AUTH.nuevo; try { const rec = $('#rec'); if (!rec || rec.checked) { const p = JSON.parse(localStorage.getItem('notaria_cap_persona') || '{}'); localStorage.setItem('notaria_cap_persona', JSON.stringify(Object.assign(p, { name: (r.user || {}).nombre || p.name, rut: AUTH.rut, k: AUTH.k }))); } else sessionStorage.setItem('notaria_panel_auth', JSON.stringify(AUTH)); } catch (e) {} }
+D = r; try { localStorage.setItem('notaria_panel_cache', JSON.stringify(Object.assign({}, r, { _rut: AUTH.rut }))); } catch (e) {} pintar();
 } catch (e) { if (!enFondo) login('No se pudo conectar. Revisa tu internet e intenta de nuevo.'); }
 }
 function resumenDe(ps, reps) {
@@ -85,7 +85,7 @@ $('#app').innerHTML = `<div class="top"><img src="${LOGO}" alt="Primera Notaría
 <span style="font-size:12px;color:#6B7280">Datos al ${esc(D.act || '—')}</span><button class="lnk" id="ref">↻ Actualizar</button><a class="volver" href="./">⬅ Volver al portal</a><button class="lnk" id="sal">Cerrar sesión</button></div>
 <div class="wrap"><div class="tabs">${[['resumen', 'Resumen'], ['personas', 'Trabajadores']].concat(D.pendientes ? [['inscripciones', 'Inscripciones', D.pendientes.length]] : []).concat(D.reportes.length ? [['reportes', 'Reportes', T.rep]] : []).concat(D.jefaturas ? [['jefaturas', 'Jefaturas']] : []).map(([k, t, c]) => `<button class="tab${vista === k ? ' on' : ''}" data-v="${k}">${t}${c ? `<span class="ct">${c}</span>` : ''}</button>`).join('')}</div><div id="cont"></div></div>`;
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => { vista = b.dataset.v; pintar(); });
-$('#ref').onclick = cargar; $('#sal').onclick = () => { if (!confirm('¿Cerrar sesión? Después tendrás que escribir tu clave de nuevo. Para volver a las charlas usa «Volver al portal».')) return; try { localStorage.removeItem('hsl_cap_persona'); localStorage.removeItem('hsl_cap_ruta'); localStorage.removeItem('hsl_panel_cache'); sessionStorage.removeItem('hsl_panel_auth'); } catch (e) {} AUTH = null; login(); };
+$('#ref').onclick = cargar; $('#sal').onclick = () => { if (!confirm('¿Cerrar sesión? Después tendrás que escribir tu clave de nuevo. Para volver a las charlas usa «Volver al portal».')) return; try { localStorage.removeItem('notaria_cap_persona'); localStorage.removeItem('notaria_cap_ruta'); localStorage.removeItem('notaria_panel_cache'); sessionStorage.removeItem('notaria_panel_auth'); } catch (e) {} AUTH = null; login(); };
 ({ resumen: vResumen, personas: vPersonas, reportes: vReportes, inscripciones: vInscripciones, jefaturas: vJefaturas })[vista](T);
 }
 function vResumen(T) {
@@ -186,6 +186,6 @@ $('#qJ').oninput = e => { qJ = e.target.value; clearTimeout(window.__tj); window
 }
 // Inicio rápido: muestra los últimos datos guardados de esta misma persona y actualiza en segundo plano
 (async function () { if (!AUTH) return login(); AUTH.h = await rutHash(AUTH.rut); let pre = null;
-try { pre = JSON.parse(localStorage.getItem('hsl_panel_cache') || 'null'); } catch (e) {}
+try { pre = JSON.parse(localStorage.getItem('notaria_panel_cache') || 'null'); } catch (e) {}
 if (pre && pre.ok && pre._rut === AUTH.rut) { D = pre; pintar(); cargar(true); } else cargar(); })();
 </script></body></html>

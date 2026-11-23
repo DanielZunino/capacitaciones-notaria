@@ -191,8 +191,8 @@
       const vigente = ap => ap && (st.topic.id === 'induccion' ? venceInduccion(ap.fecha) - Date.now() >= 30 * 864e5 : venceAprob(ap.tema_id || st.topic.id, ap.fecha) > Date.now());
       const rk = r => String(r || '').replace(/[^0-9kK]/g, '').toUpperCase();
       const local = () => {
-        try { const R = JSON.parse(localStorage.getItem('hsl_cap_ruta') || 'null'); if (R && rk(R.rut) === rk(st.rut) && R.aprob && vigente(R.aprob[st.topic.id])) return R.aprob[st.topic.id]; } catch (e) {}
-        try { const ci = JSON.parse(localStorage.getItem('hsl_cap_ind') || 'null'); if (st.topic.id === 'induccion' && ci && rk(ci.rut) === rk(st.rut) && vigente(ci)) return ci; } catch (e) {}
+        try { const R = JSON.parse(localStorage.getItem('notaria_cap_ruta') || 'null'); if (R && rk(R.rut) === rk(st.rut) && R.aprob && vigente(R.aprob[st.topic.id])) return R.aprob[st.topic.id]; } catch (e) {}
+        try { const ci = JSON.parse(localStorage.getItem('notaria_cap_ind') || 'null'); if (st.topic.id === 'induccion' && ci && rk(ci.rut) === rk(st.rut) && vigente(ci)) return ci; } catch (e) {}
         return null;
       };
       const consulta = async k => { st.hash = await rutHash(st.rut); const ctl = new AbortController(); setTimeout(() => ctl.abort(), 25000);
@@ -209,7 +209,7 @@
           ok.disabled = true; ok.textContent = 'Revisando…';
           try { const d = await consulta(k);
             if (!d.ok && (d.error === 'clave' || d.error === 'sinnac')) { ok.disabled = false; ok.textContent = 'Revisar mi registro'; er.textContent = d.error === 'sinnac' ? 'Tu ficha no tiene fecha de nacimiento. Contacta al área de RR.HH.' : 'Clave incorrecta. Intenta de nuevo.'; er.style.display = 'block'; return; }
-            if (d.ok) { try { const ps = JSON.parse(localStorage.getItem('hsl_cap_persona') || '{}') || {}; localStorage.setItem('hsl_cap_persona', JSON.stringify(Object.assign(ps, { name: st.name, rut: st.rut, k }))); } catch (e2) {} }
+            if (d.ok) { try { const ps = JSON.parse(localStorage.getItem('notaria_cap_persona') || '{}') || {}; localStorage.setItem('notaria_cap_persona', JSON.stringify(Object.assign(ps, { name: st.name, rut: st.rut, k }))); } catch (e2) {} }
             res(d.ok ? desde(d) : null);
           } catch (e2) { res(null); } };
         document.getElementById('siOk').onclick = go;
@@ -235,9 +235,9 @@
   const rkR = r => String(r || '').replace(/[^0-9kK]/g, '').toUpperCase();
   const esRevisor = () => false; const esRevisor0 = () => { try { if (!RUTA || !RUTA.persona) return false; if (REV_RUT.indexOf(rkR(RUTA.rut)) >= 0) return true; const n = sinT(RUTA.persona.nombre); return REV_NOM.some(r => r.test(n)); } catch (e) { return false; } };
   window.siEsRevisor = esRevisor;
-  let VER = ''; try { VER = localStorage.getItem('hsl_cap_ver') || ''; } catch (e) {}
+  let VER = ''; try { VER = localStorage.getItem('notaria_cap_ver') || ''; } catch (e) {}
   // cada vez que alguien ingresa con su RUT, parte viendo su propia empresa
-  try { const bR = () => { VER = ''; try { localStorage.removeItem('hsl_cap_ver'); } catch (e) {} };
+  try { const bR = () => { VER = ''; try { localStorage.removeItem('notaria_cap_ver'); } catch (e) {} };
     document.addEventListener('click', ev => { if (ev.target && (ev.target.id === 'bRuta' || ev.target.id === 'bNoSoy')) bR(); }, true);
     document.addEventListener('keydown', ev => { if (ev.key === 'Enter' && ev.target && (ev.target.id === 'rutHome' || ev.target.id === 'claveHome')) bR(); }, true); } catch (e) {}
   const empVista = () => { const e = empSesion(); return esRevisor() && EMPRESAS[VER] ? VER : e; };
@@ -254,7 +254,7 @@
       <div class="srV" style="background:${E.c1}">${v === mia ? `Estás viendo las charlas de <b>tu empresa</b>: ${E.n}` : `Estás revisando las charlas de <b>${E.n}</b> (no es tu empresa)`}</div>`;
     sec.parentNode.insertBefore(d, sec);
     d.querySelectorAll('button').forEach(b => b.onclick = () => {
-      const y = window.scrollY; VER = b.dataset.e; try { localStorage.setItem('hsl_cap_ver', VER); } catch (e) {}
+      const y = window.scrollY; VER = b.dataset.e; try { localStorage.setItem('notaria_cap_ver', VER); } catch (e) {}
       renderHome(); window.scrollTo(0, y);
     });
   };
@@ -544,7 +544,7 @@
 
   // ---------- 10) Al cargar: empresa de la sesión guardada (o grupo, si nadie ha ingresado)
   try {
-    const g = JSON.parse(localStorage.getItem('hsl_cap_ruta') || 'null');
+    const g = JSON.parse(localStorage.getItem('notaria_cap_ruta') || 'null');
     const e = (RUTA && RUTA.persona && empDe(RUTA.persona)) || (g && g.persona && empDe(g.persona)) || '';
     construir('notaria');
     if (typeof renderHome === 'function' && document.getElementById('secciones')) renderHome();

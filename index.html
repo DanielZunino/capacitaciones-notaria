@@ -282,7 +282,7 @@ const FIRMA_RELATOR='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAggAAAD8CAYAA
 // ===== Sonidos (sintetizados, sin archivos) =====
 const SFX = (() => {
   let ctx = null, muted = false;
-  try { muted = localStorage.getItem('hsl_cap_mute_v2') === '1'; } catch(e) {}
+  try { muted = localStorage.getItem('notaria_cap_mute_v2') === '1'; } catch(e) {}
   const ac = () => { if (!ctx) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; ctx = new A(); } if (ctx.state === 'suspended') ctx.resume(); return ctx; };
   const tone = (f, t0, dur, type='sine', vol=.25, f2=null) => { const c=ac(); if(!c) return; const o=c.createOscillator(), g=c.createGain(); o.type=type; o.frequency.setValueAtTime(f, c.currentTime+t0); if(f2) o.frequency.exponentialRampToValueAtTime(f2, c.currentTime+t0+dur); g.gain.setValueAtTime(0.0001, c.currentTime+t0); g.gain.exponentialRampToValueAtTime(vol, c.currentTime+t0+.02); g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime+t0+dur); o.connect(g).connect(c.destination); o.start(c.currentTime+t0); o.stop(c.currentTime+t0+dur+.05); };
   const noise = (t0, dur, vol=.2, filt='lowpass', fq=800, fq2=null) => { const c=ac(); if(!c) return; const n=c.sampleRate*dur, b=c.createBuffer(1,n,c.sampleRate), d=b.getChannelData(0); for(let i=0;i<n;i++) d[i]=Math.random()*2-1; const s=c.createBufferSource(); s.buffer=b; const f=c.createBiquadFilter(); f.type=filt; f.frequency.setValueAtTime(fq,c.currentTime+t0); if(fq2) f.frequency.exponentialRampToValueAtTime(fq2,c.currentTime+t0+dur); const g=c.createGain(); g.gain.setValueAtTime(vol,c.currentTime+t0); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+t0+dur); s.connect(f).connect(g).connect(c.destination); s.start(c.currentTime+t0); };
@@ -315,7 +315,7 @@ const SFX = (() => {
   };
   return {
     play: k => { if (muted || !lib[k]) return; try { lib[k](); } catch(e) {} },
-    toggle: () => { muted = !muted; try { localStorage.setItem('hsl_cap_mute_v2', muted?'1':'0'); } catch(e) {} return muted; },
+    toggle: () => { muted = !muted; try { localStorage.setItem('notaria_cap_mute_v2', muted?'1':'0'); } catch(e) {} return muted; },
     get muted() { return muted; }
   };
 })();
@@ -331,7 +331,7 @@ const VOZ = (() => {
     lorenzo:  { nombre: 'Lorenzo 🇨🇱', desc: 'Hombre, chileno, natural', fem: false, pitch: 1, rate: 1 },
     paulina:  { nombre: 'Paulina', desc: 'Mujer, latina, clara', fem: true, otra: true, pitch: 1, rate: 1.03 } };
   const VIEJO = { clara: 'catalina', capitan: 'lorenzo', chispa: 'paulina' };
-  let perfil = 'catalina'; try { perfil = localStorage.getItem('hsl_cap_voz') || 'catalina'; perfil = VIEJO[perfil] || perfil; if (!PERFILES[perfil]) perfil = 'catalina'; } catch (e) {}
+  let perfil = 'catalina'; try { perfil = localStorage.getItem('notaria_cap_voz') || 'catalina'; perfil = VIEJO[perfil] || perfil; if (!PERFILES[perfil]) perfil = 'catalina'; } catch (e) {}
   const calidad = v => (/natural|neural|online|premium|enhanced|mejorad/i.test(v.name) ? 40 : 0) + (/google/i.test(v.name) ? 15 : 0) + (v.localService === false ? 5 : 0);
   const pais = v => { const l = v.lang.replace('_', '-'); return /CL$/i.test(l) || /chile/i.test(v.name) ? 30 : /419|MX|US|AR|CO|PE/i.test(l) ? 12 : 0; };
   const elegir = () => {
@@ -369,7 +369,7 @@ const VOZ = (() => {
     else hablar(crear(true));
   }
   function stop(keep) { if (!keep) token++; try { ss && ss.cancel(); } catch (e) {} }
-  function setPerfil(k) { if (!PERFILES[k]) return; perfil = k; try { localStorage.setItem('hsl_cap_voz', k); } catch (e) {} elegirPerfil(); }
+  function setPerfil(k) { if (!PERFILES[k]) return; perfil = k; try { localStorage.setItem('notaria_cap_voz', k); } catch (e) {} elegirPerfil(); }
   return { say, stop, setPerfil, get perfil() { return perfil; }, PERFILES };
 })();
 
@@ -5569,7 +5569,7 @@ var IND_PUESTO = {
 function venceInduccion(fecha) { const m = String(fecha || '').match(/(\d{1,2})-(\d{1,2})-(\d{4})/); if (!m) return 0; return new Date(+m[3], +m[2] - 1 + IND_MESES, +m[1]).getTime(); }
 function indInfo() {
   let a = typeof RUTA !== 'undefined' && RUTA && RUTA.aprob && RUTA.aprob.induccion;
-  if (!a) try { const ci = JSON.parse(localStorage.getItem('hsl_cap_ind') || 'null'), p = JSON.parse(localStorage.getItem('hsl_cap_persona') || 'null'); if (ci && p && ci.rut === fmtRut(p.rut)) a = ci; } catch (e) {}
+  if (!a) try { const ci = JSON.parse(localStorage.getItem('notaria_cap_ind') || 'null'), p = JSON.parse(localStorage.getItem('notaria_cap_persona') || 'null'); if (ci && p && ci.rut === fmtRut(p.rut)) a = ci; } catch (e) {}
   if (!a) return { ok: false };
   const vence = venceInduccion(a.fecha), now = Date.now();
   return { ok: vence > now, vence, renovar: vence - now < 30 * 864e5, nota: a.nota };
@@ -5667,7 +5667,7 @@ function textoModalidad(D) {
 // Pantalla del monitor/relator: muestra el código del día
 async function pantallaMonitor() {
   show('s-monitor');
-  let pin = ''; try { pin = localStorage.getItem('hsl_cap_pin') || ''; } catch (e) {}
+  let pin = ''; try { pin = localStorage.getItem('notaria_cap_pin') || ''; } catch (e) {}
   const pinta = msg => {
     $('mBody').innerHTML = `<p>Ingresa tu clave personal de monitor. El código del día se lo das a los trabajadores al iniciar la charla.</p>
       <input type="text" id="mPin" inputmode="numeric" maxlength="8" placeholder="Clave de monitor" value="${pin}">
@@ -5680,14 +5680,14 @@ async function pantallaMonitor() {
     $('mBody').innerHTML = '<p>Consultando…</p>';
     try {
       const r = await fetch(SCRIPT_URL + '?monitor=' + await sha('monitor|' + pin)).then(x => x.json());
-      if (!r.ok) { try { localStorage.removeItem('hsl_cap_pin'); } catch (e) {} return pinta('Clave no válida.'); }
-      try { localStorage.setItem('hsl_cap_pin', pin); } catch (e) {}
+      if (!r.ok) { try { localStorage.removeItem('notaria_cap_pin'); } catch (e) {} return pinta('Clave no válida.'); }
+      try { localStorage.setItem('notaria_cap_pin', pin); } catch (e) {}
       $('mBody').innerHTML = `<div class="vok"><b>${r.nombre}</b>${r.cargo || ''}</div>
         <p style="text-align:center;margin-top:8px">Código de hoy · ${r.fecha}</p>
         <div style="text-align:center;font:bold 72px Arial;letter-spacing:10px;color:#FFC20E">${r.codigo}</div>
         <p style="font-size:14px">Dicta este código al inicio de la charla. Los trabajadores lo escriben en "Código de la charla". Así su diploma queda como <b style="color:#fff">presencial, dirigida por ${r.nombre}</b>. El código cambia cada día.</p>
         <button class="btn ghost" id="bOtro">Usar otra clave</button>`;
-      $('bOtro').onclick = () => { pin = ''; try { localStorage.removeItem('hsl_cap_pin'); } catch (e) {} pinta(''); };
+      $('bOtro').onclick = () => { pin = ''; try { localStorage.removeItem('notaria_cap_pin'); } catch (e) {} pinta(''); };
     } catch (e) { pinta('No se pudo consultar. Revisa la conexión.'); }
   };
   if (pin) ver(); else pinta('');
@@ -6045,8 +6045,6 @@ function diplomaCanvas(o){
 }
 let _sig=null;
 function sigImg(){ return _sig; }
-// 23-11-2026: firma liviana (la planilla corta sobre ~49.000 caracteres)
-function sigData(){ if(!_sig) return ''; const W=Math.min(480,_sig.width), H=Math.round(_sig.height*W/_sig.width); const c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d'); x.drawImage(_sig,0,0,W,H); let s=c.toDataURL('image/png'); if(s.length<40000) return s; x.globalCompositeOperation='destination-over'; x.fillStyle='#fff'; x.fillRect(0,0,W,H); for(const q of [0.85,0.7,0.5,0.35]){ s=c.toDataURL('image/jpeg',q); if(s.length<40000) return s; } return s; }
 function captureSig(){ const c=document.createElement('canvas'); c.width=480; c.height=170; const x=c.getContext('2d'); x.drawImage(sig,0,0,c.width,c.height); _sig=c; }
 function buildPdf(cv, reg){
   const { jsPDF } = window.jspdf; const pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
@@ -6088,7 +6086,7 @@ function send(){
   if(!SCRIPT_URL || SCRIPT_URL.indexOf('http')!==0){ $('sent').textContent=''; return; }
   const data = { codigo:st.code, nombre:st.name, rut:st.rut, tema_id:st.topic.id, tema:st.topic.title, nota:fmtN(st.nota), logro:Math.round(st.ok/st.topic.quiz.length*100),
     correctas:st.ok, total:st.topic.quiz.length, intentos:st.attempts, errores:st.errors.join(', '), tiempo_seg:Math.round((Date.now()-st.start)/1000),
-    duracion_min:durTema(st.topic), modalidad:st.modal||'presencial', dirige:st.dirige?st.dirige.nombre:'', dirige_cargo:st.dirige?st.dirige.cargo:'', empresa:st.persona?st.persona.empresa:'', sucursal:st.persona?st.persona.sucursal:'', tiempo_app_min:Math.max(1,Math.round((st.date-st.start)/60000)), horas: hhmm(new Date(st.start))+' a '+hhmm(st.date)+' h', firma: sigData(), archivo:fileName(), diploma: st.pdf ? st.pdf.output('datauristring').split(',')[1] : '' };
+    duracion_min:durTema(st.topic), modalidad:st.modal||'presencial', dirige:st.dirige?st.dirige.nombre:'', dirige_cargo:st.dirige?st.dirige.cargo:'', empresa:st.persona?st.persona.empresa:'', sucursal:st.persona?st.persona.sucursal:'', tiempo_app_min:Math.max(1,Math.round((st.date-st.start)/60000)), horas: hhmm(new Date(st.start))+' a '+hhmm(st.date)+' h', firma: _sig ? _sig.toDataURL('image/png') : '', archivo:fileName(), diploma: st.pdf ? st.pdf.output('datauristring').split(',')[1] : '' };
   $('sent').textContent='Registrando tu diploma…';
   fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)})
     .then(()=>{ $('sent').textContent='✔ Diploma registrado'; }).catch(()=>{ $('sent').textContent='No se pudo registrar. Avísale al relator.'; });
@@ -6286,7 +6284,7 @@ function ds44Cert() {
   guiar('¡Felicitaciones! Aquí está tu certificado del curso. Toca el botón amarillo para descargarlo en PDF.', 'bDl', 'DESCARGAR', '');
   try { st.pdf = ds44Pdf(cv, det, st.code); } catch (e) { st.pdf = null; }
   const data = { accion: 'ds44_cert', codigo: st.code, hash: st.hash, nombre: st.name, rut: st.rut, ini: D.ini, fin: D.fin, vence: D.vence, venceTs: D.venceTs,
-    mods: JSON.stringify(D.mods.map(m => ({ id: m.id, fecha: m.fecha, errores: m.errores, modalidad: m.modalidad || 'presencial', dirige: m.dirige || '' }))), firma: sigData(), archivo: fileName(),
+    mods: JSON.stringify(D.mods.map(m => ({ id: m.id, fecha: m.fecha, errores: m.errores, modalidad: m.modalidad || 'presencial', dirige: m.dirige || '' }))), firma: _sig ? _sig.toDataURL('image/png') : '', archivo: fileName(),
     pdf: st.pdf ? st.pdf.output('datauristring').split(',')[1] : '' };
   $('sent').textContent = 'Registrando tu certificado…';
   fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data) })
@@ -6320,14 +6318,14 @@ function aDate(s) { const m = String(s || '').match(/(\d{1,2})-(\d{1,2})-(\d{4})
   b.onclick = openDS44;
 })();
 // ===== Reanudar: guarda en el teléfono el punto exacto donde quedó la persona =====
-const SES_KEY = 'hsl_cap_sesion', SES_DIAS = 30;
+const SES_KEY = 'notaria_cap_sesion', SES_DIAS = 30;
 function sesGuardar(fase) {
   try {
     const base = st.mode === 'ds44' ? ds44Quiz(st.mod) : (TOPICS.find(t => t.id === st.topic.id) || st.topic).quiz;
     const cola = fase === 'quiz' ? st.topic.quiz.map(q => base.indexOf(q)) : null;
     localStorage.setItem(SES_KEY, JSON.stringify({ mode: st.mode, id: st.mode === 'ds44' ? st.mod.id : st.topic.id, name: st.name, rut: st.rut, hash: st.hash || '',
       fase, repaso: !!st.repaso, li: st.li, qi: st.qi, ok: st.ok, errors: st.errors, cola, attempts: st.attempts, start: st.start, ts: Date.now() }));
-    { let ps = {}; try { ps = JSON.parse(localStorage.getItem('hsl_cap_persona') || '{}') || {}; } catch (e) {} localStorage.setItem('hsl_cap_persona', JSON.stringify(Object.assign(ps, { name: st.name, rut: st.rut }))); }   // conserva la clave
+    { let ps = {}; try { ps = JSON.parse(localStorage.getItem('notaria_cap_persona') || '{}') || {}; } catch (e) {} localStorage.setItem('notaria_cap_persona', JSON.stringify(Object.assign(ps, { name: st.name, rut: st.rut }))); }   // conserva la clave
   } catch (e) {}
 }
 function sesBorrar() { try { localStorage.removeItem(SES_KEY); } catch (e) {} }
@@ -6367,7 +6365,7 @@ async function sesRetomar(s) {
   } else { $('lTag').textContent = st.topic.title.toUpperCase(); show('s-learn'); renderLearn(); }
 }
 // Rellena nombre y RUT si ya los escribió antes en este teléfono
-(function () { try { const p = JSON.parse(localStorage.getItem('hsl_cap_persona') || 'null'); if (p) { $('inName').value = p.name; $('inRut').value = p.rut; } } catch (e) {} })();
+(function () { try { const p = JSON.parse(localStorage.getItem('notaria_cap_persona') || 'null'); if (p) { $('inName').value = p.name; $('inRut').value = p.rut; } } catch (e) {} })();
 // ===== Temas ya aprobados: ver diploma o repasar sin generar uno nuevo =====
 async function temaAprobado() {
   try {
@@ -7577,21 +7575,21 @@ async function identificar(rut, silencioso, clave) {
     $('rErr').innerHTML = d.error === 'sinnac' ? 'Tu ficha no tiene fecha de nacimiento registrada. <b>Contacta al área de RR.HH.</b> para completarla.'
       : 'RUT o clave incorrectos. Puedes intentarlo de nuevo. Si no te funciona, <b>contacta al área de RR.HH.</b> para revisar tu nombre y fecha de nacimiento en la nómina.';
     return; }
-  try { const ses = JSON.parse(localStorage.getItem('hsl_cap_persona') || '{}'); localStorage.setItem('hsl_cap_persona', JSON.stringify(Object.assign(ses, { rut, k: String(clave).trim() }))); } catch (e) {}
+  try { const ses = JSON.parse(localStorage.getItem('notaria_cap_persona') || '{}'); localStorage.setItem('notaria_cap_persona', JSON.stringify(Object.assign(ses, { rut, k: String(clave).trim() }))); } catch (e) {}
   const aprob = {}; (d.temas || []).forEach(t => aprob[t.tema_id] = t);
   // Lo aprobado en este teléfono los últimos días se conserva aunque el servidor aún no lo tenga (el registro puede tardar)
   const fms = f => { const m = String(f || '').match(/(\d{1,2})-(\d{1,2})-(\d{4})/); return m ? new Date(+m[3], +m[2] - 1, +m[1]).getTime() : 0; }, reciente = f => fms(f) > Date.now() - 7 * 864e5;
-  const loc = Object.assign({}, (RUTA && RUTA.rut === rut && RUTA.aprob) || {}); try { const ci = JSON.parse(localStorage.getItem('hsl_cap_ind') || 'null'); if (ci && ci.rut === rut) loc.induccion = loc.induccion && fms(loc.induccion.fecha) >= fms(ci.fecha) ? loc.induccion : ci; } catch (e) {}
+  const loc = Object.assign({}, (RUTA && RUTA.rut === rut && RUTA.aprob) || {}); try { const ci = JSON.parse(localStorage.getItem('notaria_cap_ind') || 'null'); if (ci && ci.rut === rut) loc.induccion = loc.induccion && fms(loc.induccion.fecha) >= fms(ci.fecha) ? loc.induccion : ci; } catch (e) {}
   Object.keys(loc).forEach(id => { const l = loc[id]; if (l && reciente(l.fecha) && (!aprob[id] || (id === 'induccion' && fms(l.fecha) > fms(aprob[id].fecha)))) aprob[id] = l; });
   window.__rutaServer = true;
   RUTA = { rut, jefe: d.jefe || '', persona: d.persona || null, aprob, hist: d.hist || [], inicio: d.inicio, ds44: d.ds44, ranking: d.ranking }; st.persona = d.persona || null;
-  if (d.persona) { $('inName').value = d.persona.nombre; $('inRut').value = rut; try { localStorage.setItem('hsl_cap_persona', JSON.stringify({ name: d.persona.nombre, rut, k: String(clave).trim() })); localStorage.setItem('hsl_cap_ruta', JSON.stringify(RUTA)); } catch (e) {} }
+  if (d.persona) { $('inName').value = d.persona.nombre; $('inRut').value = rut; try { localStorage.setItem('notaria_cap_persona', JSON.stringify({ name: d.persona.nombre, rut, k: String(clave).trim() })); localStorage.setItem('notaria_cap_ruta', JSON.stringify(RUTA)); } catch (e) {} }
   renderHome();
   if (!silencioso && d.persona) { const A = calcAvance(RUTA, TOPICS.filter(esMia), d.persona.secs, d.persona.extra); VOZ.say(`Hola ${primerNombre(d.persona.nombre)}. Tu nivel es: ${A.nivel.t}. ${A.nivel.m} Abajo tienes tu plan del mes.`); }
 }
 // al volver al inicio se refresca la ruta (para ver las charlas recién aprobadas)
 (function () {
-  try { const p = JSON.parse(localStorage.getItem('hsl_cap_persona') || 'null'), g = JSON.parse(localStorage.getItem('hsl_cap_ruta') || 'null');
+  try { const p = JSON.parse(localStorage.getItem('notaria_cap_persona') || 'null'), g = JSON.parse(localStorage.getItem('notaria_cap_ruta') || 'null');
     if (p && p.rut) { if (g && g.rut === fmtRut(p.rut) && g.persona) { RUTA = g; st.persona = RUTA.persona || null; $('inName').value = g.persona.nombre; $('inRut').value = g.rut; renderHome(); } if (p.k) window.__rutaCarga = new Promise(ok => setTimeout(() => identificar(p.rut, true).then(ok, ok), 300)); } } catch (e) {}
   let t0 = 0; new MutationObserver(() => { if ($('s-home').classList.contains('on') && RUTA && sesion().k && Date.now() - t0 > 4000) { t0 = Date.now(); identificar(RUTA.rut, true); } })
     .observe($('s-home'), { attributes: true, attributeFilter: ['class'] });
@@ -7609,9 +7607,9 @@ async function identificar(rut, silencioso, clave) {
   send = function () {
     try { if (RUTA && st.topic && st.nota >= 4) { const n = Math.round(st.nota * 10) / 10, prev = RUTA.aprob[st.topic.id];
       if (!prev || n > (prev.n || 0)) RUTA.aprob[st.topic.id] = { n, tema_id: st.topic.id, nota: n.toFixed(1).replace('.', ','), intentos: st.attempts || 1, fecha: dmy(new Date()) };
-      localStorage.setItem('hsl_cap_ruta', JSON.stringify(RUTA)); } } catch (e) {}
+      localStorage.setItem('notaria_cap_ruta', JSON.stringify(RUTA)); } } catch (e) {}
     try { if (st.topic && st.topic.id === 'induccion' && st.nota >= 4) { const n = Math.round(st.nota * 10) / 10, r = RUTA ? RUTA.rut : fmtRut(st.rut || $('inRut').value || '');
-      localStorage.setItem('hsl_cap_ind', JSON.stringify({ rut: r, n, tema_id: 'induccion', nota: n.toFixed(1).replace('.', ','), intentos: st.attempts || 1, fecha: dmy(new Date()) })); } } catch (e) {}
+      localStorage.setItem('notaria_cap_ind', JSON.stringify({ rut: r, n, tema_id: 'induccion', nota: n.toFixed(1).replace('.', ','), intentos: st.attempts || 1, fecha: dmy(new Date()) })); } } catch (e) {}
     return _send.apply(this, arguments);
   };
 })();
@@ -7673,7 +7671,7 @@ function aviso(txt) { let a = document.getElementById('avisoTop'); if (!a) { a =
   const home = $('s-home'); if (!home) return;
   const b = document.createElement('button'); b.className = 'jefBtn'; b.textContent = '🔐 Ingreso jefaturas'; (home.querySelector('.homeR') || home.querySelector('.wrap') || home).appendChild(b);
   b.onclick = () => { location.href = 'panel.html'; };
-  try { localStorage.removeItem('panel_clave'); localStorage.removeItem('panel_cache'); } catch (e) {}   // claves antiguas de jefatura: ya no se usan
+  try { localStorage.removeItem('notaria_panel_clave'); localStorage.removeItem('notaria_panel_cache'); } catch (e) {}   // claves antiguas de jefatura: ya no se usan
 })();
 
 // ===== Mi historial: todas las capacitaciones aprobadas, también las vencidas (nada se borra)
@@ -7691,8 +7689,8 @@ function verHistorial() {
 }
 
 // ===== Sesión del trabajador (RUT + clave)
-function sesion() { try { return JSON.parse(localStorage.getItem('hsl_cap_persona') || '{}') || {}; } catch (e) { return {}; } }
-function cerrarSesion() { RUTA = null; st.persona = null; try { localStorage.removeItem('hsl_cap_persona'); localStorage.removeItem('hsl_cap_ruta'); localStorage.removeItem('hsl_cap_ind'); } catch (e) {} $('inName').value = ''; $('inRut').value = ''; renderHome(); }
+function sesion() { try { return JSON.parse(localStorage.getItem('notaria_cap_persona') || '{}') || {}; } catch (e) { return {}; } }
+function cerrarSesion() { RUTA = null; st.persona = null; try { localStorage.removeItem('notaria_cap_persona'); localStorage.removeItem('notaria_cap_ruta'); localStorage.removeItem('notaria_cap_ind'); } catch (e) {} $('inName').value = ''; $('inRut').value = ''; renderHome(); }
 // los datos de la charla salen de la sesión y no se pueden cambiar
 (function () { const _pick = pickTopic; pickTopic = function () { const r = _pick.apply(this, arguments);
   if (RUTA && RUTA.persona) { $('inName').value = RUTA.persona.nombre; $('inRut').value = RUTA.rut; $('inName').readOnly = $('inRut').readOnly = true; }
@@ -7724,7 +7722,7 @@ function cambiarMiClave() {
     if (!d) { try { const v = await fetch(SCRIPT_URL + '?historial=' + await rutHash(RUTA.rut) + '&k=' + encodeURIComponent(n)).then(x => x.json()); if (v && v.ok) d = { ok: true }; } catch (er) {} }   // si el navegador no deja leer la respuesta, se comprueba entrando con la nueva
     if (!d) return e.textContent = 'No se pudo confirmar el cambio. Intenta de nuevo.';
     if (!d.ok) return e.textContent = d.error === 'actual' ? 'La clave actual no es correcta.' : d.error === 'debil' ? 'Usa al menos 6 caracteres, con letras y números.' : 'No se pudo cambiar. Contacta al área de RR.HH.';
-    try { const ses = sesion(); ses.k = n; localStorage.setItem('hsl_cap_persona', JSON.stringify(ses)); } catch (er) {}
+    try { const ses = sesion(); ses.k = n; localStorage.setItem('notaria_cap_persona', JSON.stringify(ses)); } catch (er) {}
     m.querySelector('form').innerHTML = '<div style="font-size:44px;text-align:center">✅</div><h3 style="margin:0;text-align:center">Clave cambiada</h3><p style="margin:0;text-align:center;color:#5A5F66">Desde ahora entras con tu nueva clave.</p><button class="btn" id="cFin">Listo</button>';
     $('cFin').onclick = () => m.style.display = 'none';
   };
