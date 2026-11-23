@@ -722,7 +722,7 @@
 (function () {
   try {
     const css = document.createElement('style');
-    css.textContent = '#bDS44{display:none!important} .dsban.dsJunto{display:flex!important;width:100%;margin:10px 0 2px;box-shadow:0 4px 14px rgba(0,0,0,.18)} .dsban.dsJunto .tag{background:#FFC400;color:#14275A;border-radius:6px;padding:2px 7px;align-self:flex-start;font-weight:bold}';
+    css.textContent = '#bDS44{display:none!important} .dsban.dsJunto svg{width:100%!important;max-height:110px} .dsban.dsJunto .dt{padding:8px 10px} .dsban.dsJunto{display:flex!important;flex-direction:column;margin:0;box-shadow:0 4px 14px rgba(0,0,0,.18)} .dsban.dsJunto .tag{background:#FFC400;color:#14275A;border-radius:6px;padding:2px 7px;align-self:flex-start;font-weight:bold}';
     document.head.appendChild(css);
     const RH = renderHome;
     renderHome = function () {
