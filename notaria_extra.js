@@ -717,3 +717,27 @@
   let n = 0; const iv = setInterval(() => { aplicar(); if (++n > 40) clearInterval(iv); }, 250);
   try { document.addEventListener('DOMContentLoaded', aplicar); window.addEventListener('load', aplicar); } catch (e) {}
 })();
+
+// ===== Curso DS 44 visible junto a la Inducción (sección "Para todos") =====
+(function () {
+  try {
+    const css = document.createElement('style');
+    css.textContent = '#bDS44{display:none!important} .dsban.dsJunto{display:flex!important;width:100%;margin:10px 0 2px;box-shadow:0 4px 14px rgba(0,0,0,.18)} .dsban.dsJunto .tag{background:#FFC400;color:#14275A;border-radius:6px;padding:2px 7px;align-self:flex-start;font-weight:bold}';
+    document.head.appendChild(css);
+    const RH = renderHome;
+    renderHome = function () {
+      const r = RH.apply(this, arguments);
+      try {
+        const sec = document.getElementById('secciones'); if (!sec) return r;
+        sec.querySelectorAll('.dsJunto').forEach(x => x.remove());
+        const card = [...sec.querySelectorAll('button.tcard')].find(b => /Inducción/.test(b.textContent)); if (!card) return r;
+        const b = document.createElement('button'); b.className = 'dsban dsJunto';
+        b.innerHTML = `${S.ds44()}<div class="dt"><span class="tag">OBLIGATORIO · DS 44</span><b>Curso de seguridad y salud en el trabajo</b><small>8 horas · 6 módulos · certificado vigente por 2 años</small><small style="color:#14275A;font-weight:bold">Toque aquí para comenzar ▸</small></div>`;
+        b.onclick = () => openDS44();
+        card.parentNode.insertBefore(b, card.nextSibling);
+      } catch (e) {}
+      return r;
+    };
+    if (typeof renderHome === 'function' && document.getElementById('secciones')) renderHome();
+  } catch (e) {}
+})();
