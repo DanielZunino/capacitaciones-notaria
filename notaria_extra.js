@@ -166,7 +166,7 @@
   esAntiguo = function () { return false; };
 
   // ---------- 8) Inscripción: si el sistema no reconoce el RUT, elige su empresa y completa la ficha guiada
-  const INSC = 'https://danielzunino.github.io/inscripcion-san-ignacio/?e=notaria';
+  const INSC = 'https://danielzunino.github.io/inscripcion-notaria/?e=notaria';
   const botonesEmp = () => `<div class="siEmpBtns" style="grid-template-columns:1fr"><a href="${INSC}" target="_blank" rel="noopener"><img alt="" src="${EMPRESAS.notaria.logo}"><span class="n">Ficha de inscripción · Primera Notaría de Los Ángeles</span></a></div>`;
   alertaNomina = function (tipo, rut) {
     let m = document.getElementById('nomModal'); if (!m) { m = document.createElement('div'); m.id = 'nomModal'; document.body.appendChild(m); }
