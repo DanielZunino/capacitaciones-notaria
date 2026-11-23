@@ -342,8 +342,8 @@
       items: ['Quito el seguro (pasador)', 'Apunto a la base del fuego', 'Presiono la manilla', 'Descargo en barrido, de lado a lado'],
       w: 'Seguro, apuntar a la base, presionar y barrer de lado a lado, a 2 o 3 metros del fuego y con una salida a tu espalda.' },
     { tema: 'emergencias', emp: TODAS, tipo: 'orden', q: '🧩 Actividad: suena la alarma de evacuación. Ordena lo que haces.',
-      items: ['Dejo lo que estoy haciendo, sin volver por mis cosas', 'Ayudo a los huéspedes que tengo cerca a salir', 'Camino rápido, sin correr, por la vía de evacuación', 'Llego a la zona de seguridad y aviso a mi jefatura que estoy bien'],
-      w: 'Sales sin buscar tus cosas, orientas a los huéspedes cercanos, caminas rápido por la vía de evacuación, llegas a la zona de seguridad y avisas que estás bien.' }
+      items: ['Dejo lo que estoy haciendo, sin volver por mis cosas', 'Ayudo a las personas que tengo cerca a salir', 'Camino rápido, sin correr, por la vía de evacuación', 'Llego a la zona de seguridad y aviso a mi jefatura que estoy bien'],
+      w: 'Sales sin buscar tus cosas, orientas a las personas cercanas, caminas rápido por la vía de evacuación, llegas a la zona de seguridad y avisas que estás bien.' }
   ].concat((window.HT_ACT || []).map(a => Object.assign({ emp: TODAS }, a)));
   window.SI_ACT = SI_ACT;
   const actsDe = (tema, e) => SI_ACT.filter(a => a.tema === tema && a.emp.indexOf(e) >= 0).map(a => {
@@ -575,4 +575,145 @@
     Object.keys(R0).forEach(k => { try { renderQ[k] = R0[k]; } catch (e) {} });
     renderQ.__siQi = true;
   } catch (e) {}
+})();
+
+
+/* ===== Curso DS 44 · Primera Notaría de Los Ángeles =====
+   Contenido propio de la notaría (trato de usted, ejemplos de oficina y atención de público).
+   Reemplaza el contenido de los 6 módulos, que en otras empresas depende de charlas que aquí no existen. */
+(function () {
+  const L = (s, t, x, k) => ({ s: s, t: t, x: x, k: k });
+  const Q = (q, s, o, w) => ({ q: q, s: s, o: o, a: 0, w: w });
+  const V = (q, s, vf, w) => ({ q: q, s: s, vf: vf, w: w });
+  const C = {
+    m1: {
+      learn: [
+        L('law', 'El seguro de la Ley 16.744', 'Es un <b>seguro social obligatorio</b> contra accidentes del trabajo y enfermedades profesionales. Lo financia el empleador con una cotización y lo administra una mutualidad o el Instituto de Seguridad Laboral (ISL).', 'Toda persona trabajadora dependiente está cubierta desde el primer día.'),
+        L('report', 'Qué cubre', 'Accidentes del trabajo, accidentes de trayecto y enfermedades profesionales. Entrega <b>prestaciones médicas gratuitas</b> y <b>prestaciones económicas</b>: subsidio, indemnización o pensión, según el caso.', 'La atención por un accidente laboral no tiene costo para usted.'),
+        L('rightToKnow', 'Obligaciones del empleador', 'Tomar todas las medidas necesarias para proteger eficazmente la vida y la salud de las personas trabajadoras (Código del Trabajo, art. 184), <b>informar los riesgos</b> de cada puesto, entregar los elementos de protección sin costo y <b>capacitar</b>.', 'La prevención es una obligación legal de la empresa.'),
+        L('duties', 'Obligaciones de la persona trabajadora', 'Cumplir el Reglamento Interno de Orden, Higiene y Seguridad, usar los elementos de protección que correspondan, respetar los procedimientos, <b>avisar peligros y accidentes</b> y participar en las capacitaciones.', 'La seguridad se construye entre todos.'),
+        L('ds44', 'El DS 44 y la gestión preventiva', 'El <b>DS 44</b> (vigente desde el 1 de febrero de 2025; reemplazó a los DS 40 y 54) obliga a gestionar los riesgos: identificarlos en la <b>matriz de riesgos (MIPER)</b>, planificar un programa de trabajo preventivo, informar y capacitar.', 'Identificar, evaluar, controlar, informar y capacitar.'),
+        L('cphs', 'Comité Paritario y Delegado', 'En las empresas con <b>más de 25 trabajadores</b> se constituye un Comité Paritario de Higiene y Seguridad. En las de <b>10 a 25</b> trabajadores, sin comité, se elige un <b>Delegado de Seguridad y Salud en el Trabajo</b>.', 'Las personas trabajadoras también participan en la prevención.'),
+        L('helpMate', 'Si ocurre un accidente', 'Avise de inmediato a su jefatura. La empresa debe presentar la <b>DIAT</b> (Denuncia Individual de Accidente del Trabajo) en el organismo administrador (mutualidad o ISL); si no lo hace, puede presentarla la propia persona trabajadora. Las enfermedades se denuncian con la <b>DIEP</b>.', 'Avisar a tiempo protege sus derechos.')
+      ],
+      quiz: [
+        Q('¿Qué cubre el seguro de la Ley 16.744?', 'law', ['Accidentes del trabajo, de trayecto y enfermedades profesionales', 'Solo enfermedades comunes', 'Solo accidentes fuera del trabajo'], 'Esos son los tres riesgos cubiertos.'),
+        Q('¿Quién financia el seguro de la Ley 16.744?', 'law', ['El empleador', 'La persona trabajadora', 'Nadie'], 'El empleador paga la cotización.'),
+        Q('Según el Código del Trabajo, ¿quién debe tomar las medidas para proteger la vida y la salud de las personas trabajadoras?', 'rightToKnow', ['El empleador', 'Solo la mutualidad', 'Cada persona por su cuenta'], 'Así lo establece el art. 184 del Código del Trabajo.'),
+        Q('¿Desde cuándo rige el DS 44?', 'ds44', ['Desde el 1 de febrero de 2025', 'Desde el 1 de enero de 2000', 'Aún no rige'], 'El DS 44 reemplazó a los DS 40 y 54.'),
+        Q('¿En qué empresas es obligatorio el Comité Paritario?', 'cphs', ['En las que tienen más de 25 trabajadores', 'Solo en las que tienen más de 500', 'En ninguna'], 'Se constituye sobre 25 trabajadores.'),
+        Q('¿Cómo se llama la denuncia de un accidente del trabajo?', 'helpMate', ['DIAT', 'RUT', 'SII'], 'Denuncia Individual de Accidente del Trabajo.')
+      ]
+    },
+    m2: {
+      learn: [
+        L('hazRisk', 'Peligro y riesgo', 'El <b>peligro</b> es aquello que puede causar daño, como un cable suelto o un piso mojado. El <b>riesgo</b> es la probabilidad de que ese daño ocurra y qué tan grave sería.', 'Peligro es la fuente del daño; riesgo, la posibilidad de que ocurra.'),
+        L('miper', 'La matriz de riesgos (MIPER)', 'Es el documento donde la empresa <b>identifica los peligros</b> de cada puesto y tarea, <b>evalúa el riesgo</b> y define las <b>medidas de control</b>. Se revisa cuando cambian las tareas o el puesto, y después de un accidente.', 'Lo que no se identifica, no se puede controlar.'),
+        L('riskMap', 'Peligros típicos de una notaría', '<ul><li><b>Caídas</b>: cables sueltos, cajones abiertos, pisos húmedos, escaleras.</li><li><b>Pantalla, teclado y silla</b> mal ajustados: cuello, espalda y muñecas.</li><li><b>Atención de público</b>: usuarios molestos o agresivos, y carga mental.</li><li><b>Cargas livianas</b>: cajas de archivo, resmas de papel.</li><li><b>Emergencias</b>: sismo e incendio.</li></ul>', 'Cada puesto tiene sus propios peligros.'),
+        L('nearMiss', 'Los cuasi accidentes', 'Un <b>cuasi accidente</b> es un hecho que pudo causar daño, pero no lo hizo: por ejemplo, tropezar con un cable sin caerse. Avisarlo permite corregir la causa antes de que ocurra un accidente.', 'Un aviso a tiempo evita el próximo accidente.'),
+        L('pyramid', 'Cómo se controla un riesgo', 'Se prefiere siempre el control más fuerte posible: <b>eliminar</b> el peligro, <b>sustituir</b>, aplicar <b>controles de ingeniería</b> (por ejemplo, ajustar el puesto), <b>controles administrativos</b> (procedimientos, pausas, capacitación) y, como última barrera, los <b>elementos de protección personal</b>.', 'El elemento de protección personal es la última barrera, no la primera.'),
+        L('rightToKnow', 'Su derecho a saber', 'El DS 44 (art. 15) obliga a la empresa a <b>informar los riesgos</b> de su trabajo, las medidas preventivas y los métodos de trabajo correctos. Esta información se entrega al ingresar y cada vez que cambian sus tareas.', 'Usted tiene derecho a conocer los riesgos de su puesto.'),
+        L('riskMap', 'Actividad práctica', 'Con ayuda de la persona relatora, identifique en su puesto <b>tres peligros</b>, el riesgo asociado a cada uno y la medida de control que existe. Compárelos con la matriz de riesgos de la notaría.', 'Mirar su propio puesto con ojos de prevención.')
+      ],
+      quiz: [
+        Q('¿Qué es un peligro?', 'hazRisk', ['Una fuente que puede causar daño', 'La probabilidad de que algo ocurra', 'Un accidente que ya ocurrió'], 'El riesgo es la probabilidad; el peligro es la fuente del daño.'),
+        Q('¿Qué es la MIPER?', 'miper', ['La matriz donde se identifican los peligros y se evalúan los riesgos', 'Un seguro contra robos', 'El horario de la jornada'], 'Es la matriz de identificación de peligros y evaluación de riesgos.'),
+        Q('Usted tropieza con un cable suelto, pero no se cae. ¿Qué hace?', 'nearMiss', ['Lo avisa a su jefatura para que lo corrijan', 'No dice nada porque no pasó nada', 'Espera a que alguien se caiga para avisar'], 'Un cuasi accidente avisado permite evitar el próximo accidente.'),
+        Q('En el orden de los controles, ¿cuál es la última barrera?', 'pyramid', ['El elemento de protección personal', 'Eliminar el peligro', 'Cambiar el método de trabajo'], 'Primero se intenta eliminar o controlar el peligro en la fuente.'),
+        V('La empresa debe informar a cada persona los riesgos de su puesto y las medidas preventivas.', 'rightToKnow', true, 'Verdadero. Es una obligación del empleador (DS 44, art. 15).'),
+        Q('¿Cuándo debe revisarse la matriz de riesgos?', 'miper', ['Cuando cambian las tareas o el puesto, o después de un accidente', 'Nunca: se hace una sola vez', 'Solo cuando lo pide un cliente'], 'Debe mantenerse actualizada.')
+      ]
+    },
+    m3: {
+      learn: [
+        L('bodyMap', 'Accidente y enfermedad profesional', 'Un <b>accidente</b> ocurre de golpe. Una <b>enfermedad profesional</b> (Ley 16.744, art. 7) es la causada de manera directa por el trabajo y que produce incapacidad o muerte. Aparece de a poco, a veces después de años, y casi siempre <b>sin dolor al comienzo</b>.', 'Lo que no duele hoy puede enfermar mañana.'),
+        L('bodyMap', 'Qué puede enfermar en una oficina', '<ul><li><b>Posturas, repetición y pantallas</b>: dolor de cuello, espalda, hombros y muñecas.</li><li><b>Carga mental y estrés</b>: plazos, volumen de trámites y atención de público (riesgos psicosociales).</li><li><b>Vista cansada</b> por pantallas o iluminación inadecuada.</li><li><b>Polvo de papel y de archivo</b>: irritación de ojos y vías respiratorias.</li><li><b>Agresiones</b> verbales o físicas de usuarios molestos.</li></ul>', 'Las enfermedades del trabajo de oficina también son prevenibles.'),
+        L('duties', 'Cómo se previene', 'Primero se corrige el puesto (silla, altura de la pantalla, teclado, iluminación); después se ordena el trabajo (<b>pausas activas</b>, alternar tareas) y, cuando corresponde, se usan elementos de protección, como una mascarilla frente al polvo del archivo.', 'Un puesto bien ajustado previene más que cualquier remedio.'),
+        L('report', 'Vigilancia de la salud', 'Cuando una evaluación confirma exposición a un agente de riesgo, el organismo administrador incorpora a las personas expuestas a un <b>programa de vigilancia de la salud</b> con exámenes periódicos. En los <b>riesgos psicosociales</b>, la empresa aplica periódicamente un cuestionario (CEAL-SM/SUSESO). <b>Participar es parte de su protección.</b>', 'Detectar a tiempo permite actuar antes de que el daño avance.'),
+        L('symptoms', 'Señales de alerta', '<ul><li><b>Hormigueo</b> o dolor en manos, muñecas, hombros o espalda.</li><li><b>Ardor o cansancio</b> en los ojos y dolores de cabeza frecuentes.</li><li><b>Insomnio, irritabilidad o agotamiento</b> que no se van.</li><li><b>Tos</b> o irritación que no se pasa.</li></ul>Avise a su jefatura o a la persona encargada de prevención.', 'Avisar una molestia a tiempo no es quejarse: es prevenir.'),
+        L('law', 'Si cree que es por el trabajo', 'Avise a su jefatura. La empresa debe hacer la <b>DIEP</b> (Denuncia Individual de Enfermedad Profesional) y derivarla a su organismo administrador (mutualidad o ISL), que evalúa si es de origen laboral. Si la empresa no la hace, usted puede presentarla. Si se califica como profesional, la Ley 16.744 cubre atención gratuita y prestaciones.', 'La DIEP inicia la evaluación: pida que se haga.'),
+        L('duties', 'Autocuidado: la protección no tiene pausa', 'Acciones inseguras típicas: trabajar con dolor sin avisar, saltarse las pausas, dejar la pantalla mal ubicada o no asistir a los exámenes. El daño se suma día a día. La decisión segura: <b>ajustar su puesto, hacer sus pausas</b> y avisar cuando algo le moleste.', 'Su salud de mañana se cuida hoy.')
+      ],
+      quiz: [
+        Q('Una enfermedad profesional es:', 'bodyMap', ['La causada de manera directa por el trabajo', 'Cualquier resfrío', 'Solo un golpe ocurrido en el trabajo'], 'Así la define la Ley 16.744, art. 7.'),
+        Q('El dolor de cuello y muñecas por muchas horas frente al computador se puede prevenir:', 'bodyMap', ['Ajustando el puesto y haciendo pausas', 'Trabajando más rápido', 'Tomando un analgésico antes de comenzar'], 'Un puesto bien ajustado y las pausas activas lo previenen.'),
+        V('Si siento hormigueo en las manos al final de la jornada, lo mejor es esperar a que se pase solo.', 'symptoms', false, 'Falso. Es una señal de alerta: avisar permite evaluarla a tiempo.'),
+        Q('Lo citan a un examen del programa de vigilancia de la salud. ¿Qué hace?', 'report', ['Asiste: es parte de su protección', 'No va, se siente bien', 'Pide que vaya otra persona'], 'Los exámenes detectan daños antes de que avancen.'),
+        Q('La sigla DIEP significa:', 'law', ['Denuncia Individual de Enfermedad Profesional', 'Documento Interno de Equipos de Protección', 'Día de Inspección Programada'], 'Con la DIEP se inicia la evaluación de la enfermedad.'),
+        Q('El estrés y la carga mental sostenidos en el trabajo, ¿son un riesgo para la salud?', 'bodyMap', ['Sí: son riesgos psicosociales y deben evaluarse y prevenirse', 'No: es solo cuestión de carácter', 'Solo importan si ocurre un accidente'], 'Los riesgos psicosociales forman parte de la gestión preventiva (DS 44).')
+      ]
+    },
+    m4: {
+      learn: [
+        L('pyramid', 'Jerarquía de controles', 'Se parte por lo más efectivo: <b>eliminar</b> el peligro; luego <b>sustituir</b>; después <b>controles de ingeniería</b> y <b>controles administrativos</b> (procedimientos, pausas, capacitación) y, al final, los <b>elementos de protección personal (EPP)</b>.', 'Primero se controla la fuente; el EPP es la última barrera.'),
+        L('tidy', 'Orden y aseo', 'Mantenga los pasillos y las salidas <b>despejados</b>, los cajones cerrados, las cajas de archivo en su lugar y los cables recogidos o canalizados. Limpie de inmediato lo que se derrame y coloque una señal si el piso queda mojado.', 'Un puesto ordenado previene caídas y golpes.'),
+        L('cables', 'Electricidad segura', 'No sobrecargue los enchufes ni use alargadores en cadena. Si un cable está pelado o un equipo da descargas, <b>desconéctelo</b> y avise. Nunca repare equipos eléctricos por su cuenta.', 'Ante una falla eléctrica: desconectar y avisar.'),
+        L('protect', 'Escaleras y estantes altos', 'Para alcanzar un estante alto use una <b>escalera o paso adecuado</b>, nunca una silla con ruedas ni una caja. Suba de frente, con las manos libres y sin cargar peso excesivo.', 'La silla de la oficina no es una escalera.'),
+        L('liftGood', 'Cargas livianas y cortes', 'Para mover cajas o resmas, acérquese a la carga, flexione las rodillas, mantenga la espalda recta y pida ayuda si pesa mucho. El máximo para una persona adulta es de <b>25 kg</b> (Ley 20.949). Con el cortador, corte siempre alejando la hoja de su cuerpo.', 'Levante con las piernas, no con la espalda.'),
+        L('ppeAll', 'Elementos de protección personal (EPP)', 'Son los equipos que protegen cuando el riesgo no se pudo eliminar: <b>calzado cerrado y antideslizante</b>, <b>guantes</b> para manipular archivo o para el aseo, <b>mascarilla</b> frente al polvo y <b>lentes</b> si hay proyecciones. El empleador los entrega <b>sin costo</b> y capacita en su uso (DS 44).', 'Se usan siempre que el puesto lo exija.'),
+        L('ppeCheck', 'Uso y cuidado del EPP', 'Revíselo antes de usarlo, úselo durante <b>toda la exposición</b>, límpielo y guárdelo en un lugar limpio. Si está roto o ya no le calza, <b>pida su reposición</b>.', 'Un EPP dañado no protege.')
+      ],
+      quiz: [
+        Q('¿Cuál es la medida de control más efectiva?', 'pyramid', ['Eliminar el peligro', 'Usar un elemento de protección personal', 'Capacitar una vez al año'], 'Lo primero es siempre eliminar o controlar el peligro en la fuente.'),
+        Q('Hay un cable cruzando el pasillo. ¿Qué corresponde?', 'tidy', ['Recogerlo o canalizarlo y avisar', 'Pasar con cuidado por encima', 'Taparlo con un papel'], 'Los cables sueltos son una causa frecuente de caídas.'),
+        Q('Para alcanzar un archivo en un estante alto, usted debe usar:', 'protect', ['Una escalera o paso adecuado', 'Una silla con ruedas', 'Una caja de archivo'], 'La silla con ruedas y las cajas no son seguras.'),
+        V('El empleador debe entregar los elementos de protección personal sin costo para la persona trabajadora.', 'ppeAll', true, 'Verdadero. Es una obligación del empleador (DS 44).'),
+        Q('Un guante de trabajo está roto. ¿Qué hace?', 'ppeCheck', ['Pide su reposición', 'Lo usa igual', 'Lo repara con cinta'], 'Un EPP dañado no protege.'),
+        Q('Un equipo eléctrico da pequeñas descargas. ¿Qué hace?', 'cables', ['Lo desconecta y avisa a su jefatura', 'Lo sigue usando con cuidado', 'Intenta repararlo'], 'Nunca se repara un equipo eléctrico sin ser personal autorizado.')
+      ]
+    },
+    m5: {
+      learn: [
+        L('plan', 'El plan de emergencia', 'Es el documento que define <b>qué hacer, quién lo hace y por dónde evacuar</b> ante un sismo, un incendio u otra emergencia. La empresa debe mantenerlo actualizado y practicarlo con simulacros.', 'Conocer el plan antes de la emergencia ahorra tiempo.'),
+        L('exitFree', 'Vías de evacuación y zona de seguridad', 'Ubique las <b>salidas</b>, las vías de evacuación y la <b>zona de seguridad</b> de su lugar de trabajo. Las vías deben estar <b>siempre despejadas</b> y las puertas de salida, sin llave mientras haya personas dentro.', 'Sepa por dónde salir antes de necesitarlo.'),
+        L('quake', 'Durante un sismo', 'Mantenga la calma, <b>aléjese de ventanas, vidrios y estantes altos</b> y protéjase junto a un muro o bajo un mueble firme. <b>No use ascensores</b> ni corra hacia la salida mientras se mueve.', 'Calma, protección y, solo después, evacuar.'),
+        L('afterQuake', 'Después de un sismo', 'Cuando el movimiento termine, evacúe con calma por la vía señalada si hay daños o riesgo, <b>ayude a quien lo necesite</b>, diríjase a la zona de seguridad y espere instrucciones. <b>No regrese</b> hasta que se lo autoricen.', 'Evacuar sin correr y sin volver por objetos.'),
+        L('alarm', 'Si hay un incendio', 'Dé la alarma, <b>llame a Bomberos (132)</b> y evacúe. Si el fuego es pequeño y usted está capacitado, puede usar un extintor sin exponerse. Si hay humo, <b>avance agachado</b> y cubra su nariz y boca.', 'Primero la vida: dar la alarma y evacuar.'),
+        L('numbers', 'Números de emergencia', '<b>131</b> Ambulancia · <b>132</b> Bomberos · <b>133</b> Carabineros. Mantenga a la vista el teléfono de su organismo administrador (mutualidad o ISL) y el de su jefatura.', 'Tenerlos a mano ahorra minutos valiosos.'),
+        L('helpMate', 'Si una persona se accidenta', 'Pida ayuda y <b>llame al 131</b>. No mueva a la persona si sospecha un golpe fuerte y no le dé alimentos ni bebidas. Quienes tengan capacitación en primeros auxilios pueden asistirla hasta que llegue la ayuda.', 'Pedir ayuda a tiempo es la primera acción.')
+      ],
+      quiz: [
+        Q('Durante un sismo, ¿qué debe hacer?', 'quake', ['Alejarse de vidrios y estantes y protegerse', 'Correr al ascensor', 'Salir corriendo a la calle'], 'Primero protegerse; evacuar al terminar el movimiento si hay riesgo.'),
+        Q('¿Se pueden usar los ascensores para evacuar?', 'quake', ['No', 'Sí, porque son más rápidos', 'Solo si hay poca gente'], 'En una emergencia no se usan ascensores.'),
+        Q('Las vías de evacuación deben estar:', 'exitFree', ['Siempre despejadas', 'Con cajas mientras no se usan', 'Cerradas con llave'], 'Deben poder usarse en todo momento.'),
+        Q('¿A qué número se llama por un incendio?', 'alarm', ['132 (Bomberos)', '133 (Carabineros)', '131 (Ambulancia)'], '132 es Bomberos, 133 Carabineros y 131 Ambulancia.'),
+        V('Después de evacuar, se puede volver por las pertenencias antes de que se autorice el regreso.', 'afterQuake', false, 'Falso. No se regresa hasta que lo autoricen.'),
+        Q('Hay humo en el pasillo. ¿Cómo avanza?', 'alarm', ['Agachado, cubriéndose nariz y boca', 'De pie y rápido', 'Sin cubrirse'], 'El humo sube: cerca del suelo hay más aire respirable.')
+      ]
+    },
+    m6: {
+      learn: [
+        L('signsAll', 'Colores de seguridad', '<b>Rojo</b>: prohibición y equipos contra incendio. <b>Amarillo</b>: advertencia de peligro. <b>Azul</b>: obligación (use este elemento). <b>Verde</b>: salidas, evacuación, primeros auxilios y zonas de seguridad.', 'El color indica de inmediato qué tipo de mensaje es.'),
+        L('signOblig', 'Formas de las señales', 'El <b>círculo con barra roja</b> prohíbe; el <b>triángulo amarillo</b> advierte un peligro; el <b>círculo azul</b> obliga a algo; el <b>rectángulo verde</b> indica salidas y seguridad.', 'Forma y color van juntos.'),
+        L('signCovered', 'Señales visibles', 'Las señales deben estar <b>visibles y despejadas</b>: no las tape con muebles, cajas ni afiches. Si una señal está dañada o falta, avise.', 'Una señal tapada no cumple su función.'),
+        L('fireClasses', 'El fuego y sus clases', 'Para que haya fuego se necesitan <b>combustible, oxígeno y calor</b>. En una notaría lo más frecuente es el fuego de <b>papel y madera (clase A)</b> y el de origen <b>eléctrico (clase C)</b>.', 'El extintor debe ser el adecuado al tipo de fuego.'),
+        L('noSmoke', 'Cómo evitar un incendio', 'No sobrecargue los enchufes, desconecte los equipos que no usa, <b>no deje papel junto a fuentes de calor</b>, mantenga el orden y respete la prohibición de fumar y de usar estufas no autorizadas.', 'La mayoría de los incendios se puede evitar.'),
+        L('extUse', 'Uso del extintor', 'Solo si el fuego es pequeño, usted está capacitado y tiene una salida a su espalda: <b>tire</b> el seguro, <b>apunte</b> a la base de las llamas, <b>apriete</b> la palanca y <b>barra</b> de lado a lado.', 'Ante la duda, no combata el fuego: evacúe.'),
+        L('extUseOk', 'Revisión de extintores', 'Los extintores deben estar <b>en su lugar, señalizados, con el seguro puesto y con la carga vigente</b> (revise la etiqueta de mantención). Si nota uno despresurizado o bloqueado, avise.', 'Un extintor sin carga no sirve.')
+      ],
+      quiz: [
+        Q('¿Qué color indica obligación, como "use este elemento"?', 'signOblig', ['Azul', 'Rojo', 'Verde'], 'El azul indica obligación.'),
+        Q('Un círculo con una barra roja significa:', 'signOblig', ['Prohibición', 'Advertencia de peligro', 'Salida de emergencia'], 'El círculo con barra roja prohíbe.'),
+        Q('Las señales de seguridad deben estar:', 'signCovered', ['Visibles y despejadas', 'Cubiertas con afiches', 'Guardadas en un cajón'], 'Una señal tapada no cumple su función.'),
+        Q('En una oficina, un fuego de papel o madera es de clase:', 'fireClasses', ['A', 'B', 'D'], 'La clase A corresponde a sólidos como papel y madera.'),
+        Q('Un equipo eléctrico se incendia. ¿Qué hace primero?', 'fireClasses', ['Da la alarma y corta la energía si es seguro hacerlo', 'Le tira agua', 'Lo ignora porque el fuego es pequeño'], 'Nunca se usa agua en un fuego de origen eléctrico.'),
+        Q('Ante la duda con un incendio, la regla es:', 'extUse', ['Evacuar y llamar a Bomberos (132)', 'Intentar apagarlo a toda costa', 'Esperar a ver qué pasa'], 'Primero la vida: evacuar y pedir ayuda.')
+      ]
+    }
+  };
+  function aplicar() {
+    try {
+      if (typeof DS44 === 'undefined' || !DS44 || !Array.isArray(DS44.modulos)) return false;
+      DS44.modulos.forEach(m => {
+        const c = C[m.id]; if (!c) return;
+        m.learn = c.learn; m.quiz = c.quiz; m.learnExtra = null;
+        m.learnF = () => c.learn.slice(); m.quizF = () => c.quiz.slice();
+        m.__fix44 = true;
+      });
+      return true;
+    } catch (e) { return false; }
+  }
+  aplicar();
+  let n = 0; const iv = setInterval(() => { aplicar(); if (++n > 40) clearInterval(iv); }, 250);
+  try { document.addEventListener('DOMContentLoaded', aplicar); window.addEventListener('load', aplicar); } catch (e) {}
 })();
